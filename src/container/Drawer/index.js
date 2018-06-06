@@ -1,12 +1,28 @@
-import React, { Component } from 'react'
-import { View, Text } from 'react-native'
+import React from 'react'
+import { View, StyleSheet } from 'react-native'
+import { FontAwesome } from '@expo/vector-icons'
 
-export default class DrawerScreen extends Component {
-  render () {
-    return (
-      <View>
-        <Text> textInComponent </Text>
-      </View>
-    )
+const DrawerScreen = (props) => (
+  <View style={styles.container}>
+    <View style={styles.topContainer} >
+      <FontAwesome name='user-circle-o' size={150} color='green' />
+    </View>
+    <View style={styles.bottomContainer} />
+  </View>
+)
+
+export default DrawerScreen
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  topContainer: {
+    flex: 0.35,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  bottomContainer: {
+    flex: 1
   }
-}
+})

@@ -24,7 +24,7 @@ class SignupScreen extends Component {
   }
   onLogInPress () {
     const { email, password } = this.state
-    this.props.navigation.navigate('Main')
+    this.props.navigation.navigate('User')
   }
   render () {
     return (

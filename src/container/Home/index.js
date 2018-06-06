@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 class HomeScreen extends Component {
-  static navigationOptions = {
-    headerTitle: 'Home'
-  }
   render () {
     return (
       <View style={styles.container}>

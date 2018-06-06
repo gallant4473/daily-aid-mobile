@@ -9,15 +9,33 @@ import DrawerScreen from '../Drawer'
 import Status from '../Status'
 
 const MainScreen = createDrawerNavigator({
-  Home: {
-    screen: HomeScreen
-  },
-  Notifications: {
-    screen: DrawerScreen
+  Home: HomeScreen
+}, {
+  contentComponent: DrawerScreen,
+  navigationOptions: {
+    headerStyle: {
+      backgroundColor: '#f4511e',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    }
   }
 })
 
-class StatusScreen extends Component {
+class UserStatusScreen extends Component {
+  static router = MainScreen.router;
+  render() {
+    return (
+      <View style={styles.container}>
+        <Status navigation={this.props.navigation} />
+        <MainScreen navigation={this.props.navigation} />
+      </View>
+    )
+  }
+}
+
+class AdminStatusScreen extends Component {
   static router = MainScreen.router;
   render() {
     return (
@@ -35,7 +53,9 @@ const styles = StyleSheet.create({
   }
 })
 
-const AppStack = createStackNavigator({ Main: StatusScreen })
+const UserStack = createStackNavigator({ UserMain: UserStatusScreen })
+const AdminStack = createStackNavigator({ AdminMain: AdminStatusScreen })
+
 const AuthStack = createStackNavigator({
   Login: LoginScreen,
   Signup: SignupScreen
@@ -44,8 +64,9 @@ const AuthStack = createStackNavigator({
 const Main = createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
-    App: AppStack,
-    Auth: AuthStack
+    User: UserStack,
+    Auth: AuthStack,
+    Admin: AdminStack
   },
   {
     initialRouteName: 'AuthLoading'

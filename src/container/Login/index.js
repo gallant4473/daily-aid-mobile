@@ -21,7 +21,7 @@ class LoginScreen extends Component {
   }
   onLogInPress () {
     const { email, password } = this.state
-    this.props.navigation.navigate('Main')
+    this.props.navigation.navigate('Admin')
   }
   render () {
     return (
