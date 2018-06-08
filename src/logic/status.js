@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGOUT_SUCCESS } from './auth'
+import { LOGIN_SUCCESS, LOGOUT_SUCCESS } from './login'
 
 export const ERROR = 'ERROR'
 export const STATUS_CANCEL = 'STATUS_CANCEL'

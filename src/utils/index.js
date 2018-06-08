@@ -1,5 +1,7 @@
 import { AsyncStorage } from 'react-native'
 
+export const BASE_URL = 'http://192.168.0.8:3000/'
+
 export const setAsync = async(key, value) => {
   try {
     await AsyncStorage.setItem(key, value)
@@ -19,15 +21,11 @@ export const removeAsync = async(key) => {
 }
 
 export const getAsync = async(key) => {
-  try {
-    const data = await AsyncStorage.getItem(key)
-    return data
-  } catch (error) {
-    return undefined
-  }
+  const data = await AsyncStorage.getItem(key)
+  return data
 }
 
-export function apiCall (url, method, authReq = true, body = {}) {
+export function apiCall (url, method, authReq = true, body = {}, bearer = '') {
   let obj = {}
   if (method === 'POST' || method === 'PUT' || method === 'DELETE') {
     obj = {
@@ -45,7 +43,7 @@ export function apiCall (url, method, authReq = true, body = {}) {
     return ({
       ...obj,
       headers: {
-        Authorization: getAsync('auth') ? getAsync('auth') : '',
+        Authorization: `Bearer ${bearer}`,
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
       }

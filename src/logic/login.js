@@ -4,7 +4,7 @@ import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/observable/of'
-import { setAsync, getAsync, removeAsync, apiCall } from '../utils'
+import { getAsync, setAsync, removeAsync, apiCall, BASE_URL } from '../utils'
 import { ERROR } from './status'
 
 // Constants
@@ -19,7 +19,7 @@ const INITIAL_STATE = {
   data: [],
   loading: false,
   error: false,
-  loggedIn: getAsync('accessToken')
+  loggedIn: getAsync('auth')
 }
 
 // Login action
@@ -29,10 +29,12 @@ export const loginAction = payload => ({
 })
 
 // Logout action
-export const logoutAction = payload => ({
-  type: LOGOUT,
-  payload
-})
+export const logoutAction = payload => {
+  return {
+    type: LOGOUT,
+    payload
+  }
+}
 
 // Login Success action
 const loginSuccess = payload => ({
@@ -41,15 +43,17 @@ const loginSuccess = payload => ({
 })
 
 // Logout success action
-const logoutSuccess = payload => ({
-  type: LOGOUT_SUCCESS,
-  payload
-})
+const logoutSuccess = payload => {
+  return {
+    type: LOGOUT_SUCCESS,
+    payload
+  }
+}
 
 // Login epic
 export const loginEpic = action$ => action$
   .ofType(LOGIN)
-  .mergeMap(action => staticAjax(apiCall(`${process.env.baseUrl}api/v0/auth/register`, 'POST', false, action.payload))
+  .mergeMap(action => staticAjax(apiCall(`${BASE_URL}api/v0/auth/login`, 'POST', false, action.payload))
     .map(response => loginSuccess(response))
     .catch(error => Observable.of({
       type: LOGIN_FAILURE,
@@ -62,7 +66,7 @@ export const loginEpic = action$ => action$
 // Logout epic
 export const logoutEpic = action$ => action$
   .ofType(LOGOUT)
-  .mergeMap(action => staticAjax(apiCall(`${process.env.baseUrl}api/v0/auth/logout`, 'DELETE'))
+  .mergeMap(action => staticAjax(apiCall(`${BASE_URL}api/v0/auth/logout`, 'DELETE', true, {}, action.payload))
     .map(response => logoutSuccess(response))
     .catch(error => Observable.of({
       type: LOGOUT_FAILURE,
@@ -72,8 +76,8 @@ export const logoutEpic = action$ => action$
       payload: error
     })))
 
-// Auth reducer updates both login and logout
-export function authReducer (state = INITIAL_STATE, action) {
+// Auth reducer updates both login
+export function loginReducer (state = INITIAL_STATE, action) {
   switch (action.type) {
     case LOGIN: {
       return {
@@ -85,31 +89,48 @@ export function authReducer (state = INITIAL_STATE, action) {
       }
     }
     case LOGIN_SUCCESS: {
-      const error = setAsync('auth', action.payload.response.data)
+      setAsync('auth', JSON.stringify(action.payload.response.data))
       return {
         ...state,
-        data: action.payload.response.data,
+        data: [action.payload.response.data],
         loading: false,
-        error,
+        error: false,
         loggedIn: true
+      }
+    }
+    case LOGIN_FAILURE: {
+      return {
+        ...state,
+        data: action.payload.status,
+        loading: false,
+        error: true,
+        loggedIn: false
+      }
+    }
+    default:
+      return state
+  }
+}
+
+// Auth reducer updates both login and logout
+export function logoutReducer (state = INITIAL_STATE, action) {
+  switch (action.type) {
+    case LOGOUT: {
+      return {
+        ...state,
+        data: [],
+        loading: true,
+        error: false,
+        loggedIn: false
       }
     }
     case LOGOUT_SUCCESS: {
       removeAsync('auth')
       return {
         ...state,
-        data: action.payload.response,
+        data: [action.payload.response],
         loading: false,
         error: false,
-        loggedIn: false
-      }
-    }
-    case LOGIN_FAILURE: {
-      return {
-        ...state,
-        data: [],
-        loading: false,
-        error: true,
         loggedIn: false
       }
     }

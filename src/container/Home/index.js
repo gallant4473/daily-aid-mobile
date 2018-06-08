@@ -1,22 +1,20 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 
 class HomeScreen extends Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerRight: (
+        <Ionicons onPress={() => navigation.openDrawer()} name="ios-menu" size={50} color="white" />
+      )
+    }
+  }
+
   render () {
     return (
       <View style={styles.container}>
-        <View>
-          <Text>Home</Text>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')} >
-            <Text>Go to Login</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.props.navigation.push('Home')} >
-            <Text>Go to Home again</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.props.navigation.popToTop()} >
-            <Text>Go to Top</Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.text} >Welcome User</Text>
       </View>
     )
   }
@@ -27,6 +25,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
+  }, text: {
+    fontSize: 24,
   }
 })
 

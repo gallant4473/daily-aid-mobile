@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, ImageBackground, Keyboard,  TouchableWithoutFeedback, Picker } from 'react-native'
+import { connect } from 'react-redux'
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, ImageBackground, Keyboard,  TouchableWithoutFeedback, Picker, ActivityIndicator } from 'react-native'
+import { signupAction } from '../../logic/signup'
 
 class SignupScreen extends Component {
   static navigationOptions = {
@@ -17,16 +19,34 @@ class SignupScreen extends Component {
     this.onChange = this.onChange.bind(this)
     this.onLogInPress = this.onLogInPress.bind(this)
   }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.signup.data !== this.props.signup.data && nextProps.signup.data.length > 0) {
+      this.setState({
+        email: '',
+        password: '',
+        confirmPassword: '',
+        condominium: '',
+        userName: ''
+      }, () => this.props.navigation.goBack())
+    }
+  }
   onChange(value, key) {
     this.setState({
       [key]: value
     })
   }
   onLogInPress () {
-    const { email, password } = this.state
-    this.props.navigation.navigate('User')
+    const { email, password, userName, condominium } = this.state
+    this.props.signupAction({
+      email,
+      user_name: userName,
+      password,
+      condominium
+    })
   }
   render () {
+    const { email, password, userName, confirmPassword } = this.state
+    const disabled = email.length === 0 || password.length === 0 || confirmPassword.length === 0 || userName.length === 0 || password !== confirmPassword
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
@@ -73,12 +93,17 @@ class SignupScreen extends Component {
                 <Picker.Item label="Java" value="java" />
                 <Picker.Item label="JavaScript" value="js" />
               </Picker>
-              <TouchableOpacity style={styles.loginBtn} onPress={this.onLogInPress} >
+              <TouchableOpacity disabled={disabled} style={styles.loginBtn} onPress={this.onLogInPress} >
                 <Text style={styles.loginTxt} >Sign Up</Text>
               </TouchableOpacity>
               <View style={styles.dontContainer} >
                 <Text style={styles.dontText} onPress={() => this.props.navigation.navigate('Login')} >Already have an account, Login?</Text>
               </View>
+              {this.props.signup.loading ? (
+                <View style={styles.loader} >
+                  <ActivityIndicator size='large' color='white' />
+                </View>
+              ) : null}
               <View style={styles.errorContainer} >
                 <Text style={styles.errorText} >{this.state.message}</Text>
               </View>
@@ -89,6 +114,14 @@ class SignupScreen extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    signup: state.signup
+  }
+}
+
+export default connect(mapStateToProps, { signupAction })(SignupScreen)
 
 const styles = StyleSheet.create({
   container: {
@@ -160,7 +193,11 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red'
+  },
+  loader: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 300,
+    height: 60
   }
 })
-
-export default SignupScreen

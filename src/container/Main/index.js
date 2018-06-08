@@ -3,18 +3,34 @@ import { createSwitchNavigator, createStackNavigator, createDrawerNavigator } fr
 import { View, StyleSheet } from 'react-native'
 import LoginScreen from '../Login'
 import HomeScreen from '../Home'
+import AdminScreen from '../Admin'
 import AuthLoadingScreen from '../AuthLoader'
 import SignupScreen from '../Signup'
 import DrawerScreen from '../Drawer'
 import Status from '../Status'
 
-const MainScreen = createDrawerNavigator({
-  Home: HomeScreen
+const MainAdminScreen = createStackNavigator({
+  Admin: AdminScreen
 }, {
-  contentComponent: DrawerScreen,
   navigationOptions: {
     headerStyle: {
-      backgroundColor: '#f4511e',
+      backgroundColor: '#FF473A',
+      paddingRight: 15,
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    }
+  }
+})
+
+const MainUserScreen = createStackNavigator({
+  Home: HomeScreen
+}, {
+  navigationOptions: {
+    headerStyle: {
+      backgroundColor: '#FF473A',
+      paddingRight: 15,
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
@@ -24,24 +40,24 @@ const MainScreen = createDrawerNavigator({
 })
 
 class UserStatusScreen extends Component {
-  static router = MainScreen.router;
+  static router = MainUserScreen.router;
   render() {
     return (
       <View style={styles.container}>
         <Status navigation={this.props.navigation} />
-        <MainScreen navigation={this.props.navigation} />
+        <MainUserScreen navigation={this.props.navigation} />
       </View>
     )
   }
 }
 
 class AdminStatusScreen extends Component {
-  static router = MainScreen.router;
+  static router = MainAdminScreen.router;
   render() {
     return (
       <View style={styles.container}>
         <Status navigation={this.props.navigation} />
-        <MainScreen navigation={this.props.navigation} />
+        <MainAdminScreen navigation={this.props.navigation} />
       </View>
     )
   }
@@ -53,8 +69,17 @@ const styles = StyleSheet.create({
   }
 })
 
-const UserStack = createStackNavigator({ UserMain: UserStatusScreen })
-const AdminStack = createStackNavigator({ AdminMain: AdminStatusScreen })
+const UserStack = createDrawerNavigator({
+  UserMain: UserStatusScreen 
+}, {
+  contentComponent: DrawerScreen
+})
+
+const AdminStack = createDrawerNavigator({
+  AdminMain: AdminStatusScreen
+}, {
+  contentComponent: DrawerScreen
+})
 
 const AuthStack = createStackNavigator({
   Login: LoginScreen,
@@ -64,9 +89,9 @@ const AuthStack = createStackNavigator({
 const Main = createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
-    User: UserStack,
-    Auth: AuthStack,
-    Admin: AdminStack
+    UserStack,
+    AuthStack,
+    AdminStack
   },
   {
     initialRouteName: 'AuthLoading'
