@@ -7,6 +7,7 @@ import AdminScreen from '../Admin'
 import AuthLoadingScreen from '../AuthLoader'
 import SignupScreen from '../Signup'
 import DrawerScreen from '../Drawer'
+import ForgotScreen from '../Forgot'
 import Status from '../Status'
 
 const MainAdminScreen = createStackNavigator({
@@ -83,7 +84,8 @@ const AdminStack = createDrawerNavigator({
 
 const AuthStack = createStackNavigator({
   Login: LoginScreen,
-  Signup: SignupScreen
+  Signup: SignupScreen,
+  Forgot: ForgotScreen
 })
 
 const Main = createSwitchNavigator(

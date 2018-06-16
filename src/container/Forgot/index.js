@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, ImageBackground, Keyboard,  TouchableWithoutFeedback, ActivityIndicator, AsyncStorage } from 'react-native'
-import { loginAction } from '../../logic/login'
+import { forgotPasswordAction } from '../../logic/forgot'
 import { getBearerAction } from '../../logic/bearer'
 
-class LoginScreen extends Component {
+class ForgotScreen extends Component {
   static navigationOptions = {
     header: null
   }
@@ -12,44 +12,27 @@ class LoginScreen extends Component {
     super(props)
     this.state = {
       userName: '',
-      password: '',
+      email: '',
       message: ''
     }
     this.onChangeText = this.onChangeText.bind(this)
-    this.onLogInPress = this.onLogInPress.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
   componentWillReceiveProps (nextProps) {
-    if (nextProps.login.error !== this.props.login.error && nextProps.login.error) {
-      const message = 'Something went wrong, Please try again after some time'
-      if (nextProps.login.data === 401) {
-        message = 'Please check your email and password'
-      } else if (nextProps.login.data === 403) {
-        message = 'Your account is not yet approved by Admin'
-      }
-      this.setState({
-        userName: '',
-        password: '',
-        message
-      })
-    }
-    if (nextProps.login.data !== this.props.login.data && nextProps.login.data.length > 0) {
-      if (nextProps.login.data[0].is_admin) {
-        this.props.navigation.navigate('AdminStack')
-      } else {
-        this.props.navigation.navigate('UserStack')
-      }
+    if (nextProps.forgot.data !== this.props.forgot.data && nextProps.forgot.data.length > 0) {
+      this.props.navigation.push('Login')
     }
   }
   isValid() {
-    const { userName, password } = this.state;
+    const { userName, email } = this.state;
     let valid = false;
-    if (userName.length > 0 && password.length > 0) {
+    if (userName.length > 0 && email.length > 0) {
       valid = true;
     }
     if (userName.length === 0) {
       this.setState({ message: 'You must enter a user name' });
-    } else if (password.length === 0) {
-      this.setState({ message: 'You must enter a password' });
+    } else if (email.length === 0) {
+      this.setState({ message: 'You must enter an email' });
     }
     return valid;
   }
@@ -59,12 +42,12 @@ class LoginScreen extends Component {
       message: ''
     })
   }
-  onLogInPress () {
+  onSubmit () {
     if (this.isValid()) {
-      const { userName, password } = this.state
-      this.props.loginAction({
+      const { userName, email } = this.state
+      this.props.forgotPasswordAction({
         user_name: userName,
-        password
+        email
       })
     }
   }
@@ -86,18 +69,18 @@ class LoginScreen extends Component {
           >
             <View style={styles.topContainer} />
             <View style={styles.bottomContainer} >
+              <TextInput value={this.state.email} autoCapitalize="none" onChangeText={(text) => this.onChangeText(text, 'email')} underlineColorAndroid="transparent" style={styles.input} placeholder='Email' keyboardType='email-address' />
               <TextInput value={this.state.userName} autoCapitalize="none" onChangeText={(text) => this.onChangeText(text, 'userName')} underlineColorAndroid="transparent" style={styles.input} placeholder='User Name' />
-              <TextInput value={this.state.password} autoCapitalize="none" onChangeText={(text) => this.onChangeText(text, 'password')} underlineColorAndroid="transparent" secureTextEntry style={styles.input} placeholder='Password' />
               <View style={styles.forgotContainer} >
-                <Text onPress={() => this.props.navigation.push('Forgot')} style={styles.forgotTxt} >Forgot your password ?</Text>
+                <Text onPress={() => this.props.navigation.push('Login')}  style={styles.forgotTxt} >Login ?</Text>
               </View>
-              <TouchableOpacity style={styles.loginBtn} onPress={this.onLogInPress} >
-                <Text style={styles.loginTxt} >Log In</Text>
+              <TouchableOpacity style={styles.loginBtn} onPress={this.onSubmit} >
+                <Text style={styles.loginTxt} >Submit</Text>
               </TouchableOpacity>
               <View style={styles.dontContainer} >
                 <Text style={styles.dontText} onPress={() => this.props.navigation.push('Signup')} >Don't have an account?</Text>
               </View>
-              {this.props.login.loading ? (
+              {this.props.forgot.loading ? (
                 <View style={styles.loader} >
                   <ActivityIndicator size='large' color='white' />
                 </View>
@@ -115,11 +98,11 @@ class LoginScreen extends Component {
 
 const mapStateToProps = state => {
   return {
-    login: state.login
+    forgot: state.forgot
   }
 }
 
-export default connect(mapStateToProps, { loginAction, getBearerAction })(LoginScreen)
+export default connect(mapStateToProps, { forgotPasswordAction, getBearerAction })(ForgotScreen)
 
 const styles = StyleSheet.create({
   container: {

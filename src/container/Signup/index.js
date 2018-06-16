@@ -17,7 +17,7 @@ class SignupScreen extends Component {
       userName: ''
     }
     this.onChange = this.onChange.bind(this)
-    this.onLogInPress = this.onLogInPress.bind(this)
+    this.onSignUpPress = this.onSignUpPress.bind(this)
   }
   componentWillReceiveProps (nextProps) {
     if (nextProps.signup.data !== this.props.signup.data && nextProps.signup.data.length > 0) {
@@ -30,23 +30,49 @@ class SignupScreen extends Component {
       }, () => this.props.navigation.goBack())
     }
   }
+  isValid() {
+    const { userName, password, condominium, email, confirmPassword } = this.state
+    const passwordReg = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/
+    const emailReg = /[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm
+    let valid = false;
+    if (userName.length > 0 && password.length > 0 && email.length > 0 && condominium.length > 0 && confirmPassword.length > 0 && confirmPassword === password && emailReg.test(email) && passwordReg.test(password)) {
+      valid = true;
+    }
+    if (email.length === 0) {
+      this.setState({ message: 'You must enter an email' })
+    } else if (!emailReg.test(email)) {
+      this.setState({ message: 'You must enter an valid email' })
+    }else if (userName.length === 0) {
+      this.setState({ message: 'You must enter a user name' });
+    } else if (password.length === 0) {
+      this.setState({ message: 'You must enter a password' });
+    } else if (!passwordReg.test(password)) {
+      this.setState({ message: 'Must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters' });
+    } else if (password !== confirmPassword) {
+      this.setState({ message: 'You must match password in confirm password' });
+    } else if (condominium.length === 0) {
+      this.setState({ message: 'You must select a condominium' });
+    }
+    return valid;
+  }
   onChange(value, key) {
     this.setState({
       [key]: value
     })
   }
-  onLogInPress () {
-    const { email, password, userName, condominium } = this.state
-    this.props.signupAction({
-      email,
-      user_name: userName,
-      password,
-      condominium
-    })
+  onSignUpPress () {
+    if (this.isValid()) {
+      const { email, password, userName, condominium } = this.state
+      this.props.signupAction({
+        email,
+        user_name: userName,
+        password,
+        condominium
+      })
+    }
   }
   render () {
     const { email, password, userName, confirmPassword } = this.state
-    const disabled = email.length === 0 || password.length === 0 || confirmPassword.length === 0 || userName.length === 0 || password !== confirmPassword
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
@@ -93,7 +119,7 @@ class SignupScreen extends Component {
                 <Picker.Item label="Java" value="java" />
                 <Picker.Item label="JavaScript" value="js" />
               </Picker>
-              <TouchableOpacity disabled={disabled} style={styles.loginBtn} onPress={this.onLogInPress} >
+              <TouchableOpacity style={styles.loginBtn} onPress={this.onSignUpPress} >
                 <Text style={styles.loginTxt} >Sign Up</Text>
               </TouchableOpacity>
               <View style={styles.dontContainer} >
