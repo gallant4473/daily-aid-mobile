@@ -3,6 +3,19 @@ import { connect } from 'react-redux'
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, ImageBackground, Keyboard,  TouchableWithoutFeedback, Picker, ActivityIndicator } from 'react-native'
 import { signupAction } from '../../logic/signup'
 
+const condominium = [
+  {
+    label: 'OUG',
+    value: 'OUG'
+  }, {
+    label: 'Endah Villa',
+    value: 'Endah Villa'
+  }, {
+    label: 'Koi Tropika',
+    value: 'Koi Tropika'
+  }
+]
+
 class SignupScreen extends Component {
   static navigationOptions = {
     header: null
@@ -13,8 +26,9 @@ class SignupScreen extends Component {
       email: '',
       password: '',
       confirmPassword: '',
-      condominium: '',
-      userName: ''
+      condominium: condominium[0].value,
+      userName: '',
+      message: ''
     }
     this.onChange = this.onChange.bind(this)
     this.onSignUpPress = this.onSignUpPress.bind(this)
@@ -26,14 +40,20 @@ class SignupScreen extends Component {
         password: '',
         confirmPassword: '',
         condominium: '',
-        userName: ''
+        userName: '',
+        message: ''
       }, () => this.props.navigation.goBack())
+    }
+    if (nextProps.signup.error !== this.props.signup.error && nextProps.signup.error) {
+      this.setState({
+        message: nextProps.signup.message
+      })
     }
   }
   isValid() {
     const { userName, password, condominium, email, confirmPassword } = this.state
     const passwordReg = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/
-    const emailReg = /[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm
+    const emailReg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     let valid = false;
     if (userName.length > 0 && password.length > 0 && email.length > 0 && condominium.length > 0 && confirmPassword.length > 0 && confirmPassword === password && emailReg.test(email) && passwordReg.test(password)) {
       valid = true;
@@ -98,26 +118,7 @@ class SignupScreen extends Component {
                 <Text style={styles.dontText} >Select Condominium</Text>
               </View>
               <Picker selectedValue={this.state.condominium} style={styles.input} onValueChange={(itemValue, itemIndex) => this.onChange(itemValue, 'condominium')}>
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
+                {condominium.map((item, i) => <Picker.Item key={i} label={item.label} value={item.value} />)}
               </Picker>
               <TouchableOpacity style={styles.loginBtn} onPress={this.onSignUpPress} >
                 <Text style={styles.loginTxt} >Sign Up</Text>

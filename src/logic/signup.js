@@ -15,7 +15,8 @@ const SIGNUP_FAILURE = 'SIGNUP_FAILURE'
 const INITIAL_STATE = {
   data: [],
   loading: false,
-  error: false
+  error: false,
+  message: ''
 }
 
 // Signup action
@@ -51,7 +52,8 @@ export function signupReducer (state = INITIAL_STATE, action) {
         ...state,
         data: [],
         loading: true,
-        error: false
+        error: false,
+        message: ''
       }
     }
     case SIGNUP_SUCCESS: {
@@ -59,15 +61,18 @@ export function signupReducer (state = INITIAL_STATE, action) {
         ...state,
         data: [action.payload.response.data],
         loading: false,
-        error: false
+        error: false,
+        message: ''
       }
     }
     case SIGNUP_FAILURE: {
+      console.log(action.payload.response.error.message)
       return {
         ...state,
         data: [],
         loading: false,
-        error: true
+        error: true,
+        message: action.payload.response.error.message
       }
     }
     default:
