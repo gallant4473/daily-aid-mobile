@@ -18,7 +18,7 @@ export default class Loader extends Component {
       )
     }
     return (
-      <View>
+      <View style={styles.mainContainer} >
         {this.props.children}
       </View>
     )
@@ -30,5 +30,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  mainContainer: {
+    flex: 1
   }
 })

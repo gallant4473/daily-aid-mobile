@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add react-redux redux redux-observable rxjs
+  /usr/local/bin/node /usr/local/bin/yarn add tcomb-form-native
 
 PATH: 
   /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
@@ -8,7 +8,7 @@ Yarn version:
   1.7.0
 
 Node version: 
-  8.5.0
+  8.9.0
 
 Platform: 
   linux x64
@@ -30,7 +30,12 @@ npm manifest:
       "expo": "^27.0.1",
       "react": "16.3.1",
       "react-native": "https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz",
-      "react-navigation": "^2.0.1"
+      "react-native-form-validator": "^0.2.0",
+      "react-navigation": "^2.0.1",
+      "react-redux": "^5.0.7",
+      "redux": "^4.0.0",
+      "redux-observable": "^0.18.0",
+      "rxjs": "5.5.6"
     }
   }
 

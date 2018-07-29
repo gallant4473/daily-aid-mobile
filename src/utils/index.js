@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native'
 
-export const BASE_URL = 'http://192.168.0.10:3000/'
+export const BASE_URL = 'http://13.232.150.252:3000/'
 
 export const setAsync = async(key, value) => {
   try {

@@ -9,9 +9,13 @@ import SignupScreen from '../Signup'
 import DrawerScreen from '../Drawer'
 import ForgotScreen from '../Forgot'
 import Status from '../Status'
+import AddComplaintScreen from '../AddComplaint'
+import ViewComplaintScreen from '../ViewComplaint'
 
 const MainAdminScreen = createStackNavigator({
-  Admin: AdminScreen
+  Admin: AdminScreen,
+  Add: AddComplaintScreen,
+  View: ViewComplaintScreen
 }, {
   navigationOptions: {
     headerStyle: {
@@ -26,7 +30,9 @@ const MainAdminScreen = createStackNavigator({
 })
 
 const MainUserScreen = createStackNavigator({
-  Home: HomeScreen
+  Home: HomeScreen,
+  Add: AddComplaintScreen,
+  View: ViewComplaintScreen
 }, {
   navigationOptions: {
     headerStyle: {

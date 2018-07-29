@@ -66,7 +66,6 @@ export function signupReducer (state = INITIAL_STATE, action) {
       }
     }
     case SIGNUP_FAILURE: {
-      console.log(action.payload.response.error.message)
       return {
         ...state,
         data: [],

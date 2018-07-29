@@ -22,7 +22,7 @@ class LoginScreen extends Component {
     if (nextProps.login.error !== this.props.login.error && nextProps.login.error) {
       const message = 'Something went wrong, Please try again after some time'
       if (nextProps.login.data === 401) {
-        message = 'Please check your email and password'
+        message = 'Please check your username and password'
       } else if (nextProps.login.data === 403) {
         message = 'Your account is not yet approved by Admin'
       }

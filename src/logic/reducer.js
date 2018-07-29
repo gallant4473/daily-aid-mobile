@@ -5,6 +5,13 @@ import { signupReducer } from './signup'
 import { getBearerReducer } from './bearer'
 import { forgotPassowrdReducer } from './forgot'
 import { getUserReducer, activateReducer, approveReducer } from './user'
+import {
+  addComplaintReducer,
+  getAllComplaintReducer,
+  getComplaintReducer,
+  deleteComplaintReducer,
+  editComplaintReducer
+} from './complaint'
 
 const rootReducer = combineReducers({
   login: loginReducer,
@@ -15,7 +22,12 @@ const rootReducer = combineReducers({
   bearer: getBearerReducer,
   getUser: getUserReducer,
   approve: approveReducer,
-  activate: activateReducer
+  activate: activateReducer,
+  addComplaint: addComplaintReducer,
+  getAllComplaint: getAllComplaintReducer,
+  getComplaint: getComplaintReducer,
+  deleteComplaint: deleteComplaintReducer,
+  editComplaint: editComplaintReducer
 })
 
 export default rootReducer
