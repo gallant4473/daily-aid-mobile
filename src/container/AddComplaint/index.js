@@ -113,7 +113,7 @@ class AddComplaintScreen extends Component {
         <KeyboardAvoidingView style={styles.keyBoard} behavior='padding' enabled>
           <View style={styles.form} >
             <ScrollView style={styles.scrollView} >
-              <Form autoFocus onChange={this.onChange} type={User} value={this.state.value} ref={c => this._form = c} options={options} />
+              <Form underlineColorAndroid="transparent" autoFocus onChange={this.onChange} type={User} value={this.state.value} ref={c => this._form = c} options={options} />
               <Button
                 title={this.props.navigation.getParam('data') ? 'Edit Complaint' : 'Register Complaint'}
                 onPress={this.handleSubmit}

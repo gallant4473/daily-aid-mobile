@@ -15,6 +15,7 @@ class ViewComplaintScreen extends Component {
     }
   }
   componentWillMount () {
+    console.log(this.props.navigation)
     this.props.getComplaintAction({
       id: this.props.navigation.getParam('id'),
       auth: this.props.bearer.access_token
@@ -22,6 +23,12 @@ class ViewComplaintScreen extends Component {
   }
   componentWillReceiveProps (nextProps) { 
     if (nextProps.edit.flag !== this.props.edit.flag && nextProps.edit.flag) {
+      this.props.getComplaintAction({
+        id: this.props.navigation.getParam('id'),
+        auth: this.props.bearer.access_token
+      })
+    }
+    if (nextProps.navigation.state.routeName !== this.props.navigation.state.routeName) {
       this.props.getComplaintAction({
         id: this.props.navigation.getParam('id'),
         auth: this.props.bearer.access_token
@@ -57,7 +64,7 @@ class ViewComplaintScreen extends Component {
         </Picker>
       )
     }
-    return <TextInput value={data.status} editable={false} style={styles.text} />
+    return <TextInput underlineColorAndroid="transparent" value={data.status} editable={false} style={styles.text} />
   }
   renderProgress () {
     const data = this.props.get.data
@@ -68,7 +75,7 @@ class ViewComplaintScreen extends Component {
         </Picker>
       )
     }
-    return <TextInput value={data.status_by_admin} editable={false} style={styles.text} />
+    return <TextInput underlineColorAndroid="transparent" value={data.status_by_admin} editable={false} style={styles.text} />
   }
   render () {
     const data = this.props.get.data
@@ -78,25 +85,25 @@ class ViewComplaintScreen extends Component {
         <View style={styles.container} >
           <ScrollView style={styles.scrollView} >
             <Text style={styles.title} >Title</Text>
-            <TextInput value={data.title} editable={false} style={styles.text} />
+            <TextInput underlineColorAndroid="transparent" value={data.title} editable={false} style={styles.text} />
             <Text style={styles.title} >Name</Text>
-            <TextInput value={data.name} editable={false} style={styles.text} />
+            <TextInput underlineColorAndroid="transparent" value={data.name} editable={false} style={styles.text} />
             <Text style={styles.title} >Complaint Status</Text>
             {this.renderStatus()}
             <Text style={styles.title} >Progress</Text>
             {this.renderProgress()}
             <Text style={styles.title} >Email</Text>
-            <TextInput value={data.email} editable={false} style={styles.text} />
+            <TextInput underlineColorAndroid="transparent" value={data.email} editable={false} style={styles.text} />
             <Text style={styles.title} >Contact Number</Text>
-            <TextInput value={data.contact_number} editable={false} style={styles.text} />
+            <TextInput underlineColorAndroid="transparent" value={data.contact_number} editable={false} style={styles.text} />
             <Text style={styles.title} >Commom Area</Text>
-            {data.location && <TextInput value={data.location.common_area} editable={false} style={styles.text} />}
+            {data.location && <TextInput underlineColorAndroid="transparent" value={data.location.common_area} editable={false} style={styles.text} />}
             <Text style={styles.title} >Apartment</Text>
-            {data.location && <TextInput value={data.location.apartment} editable={false} style={styles.text} />}
+            {data.location && <TextInput underlineColorAndroid="transparent" value={data.location.apartment} editable={false} style={styles.text} />}
             <Text style={styles.title} >Facilities</Text>
-            {data.location && <TextInput value={data.location.facilities} editable={false} style={styles.text} />}
+            {data.location && <TextInput underlineColorAndroid="transparent" value={data.location.facilities} editable={false} style={styles.text} />}
             <Text style={styles.title} >Details</Text>
-            <TextInput style={styles.last} value={data.details} editable={false} />
+            <TextInput underlineColorAndroid="transparent" style={styles.last} value={data.details} editable={false} />
           </ScrollView>
           { !this.props.bearer.is_admin && (
             <TouchableOpacity style={styles.float} >
