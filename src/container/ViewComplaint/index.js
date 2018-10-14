@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
-import { StyleSheet, ScrollView, View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, ScrollView, View, Text, TextInput, TouchableOpacity, Picker } from 'react-native'
 import { connect } from 'react-redux'
 import { Ionicons, Entypo } from '@expo/vector-icons'
 import { Loader } from '../../component'
-import { getComplaintAction } from '../../logic/complaint'
+import { getComplaintAction, editComplaintAction } from '../../logic/complaint'
+
+const STATUS = ['Open', 'Close', 'Withdrawn']
+const PROGRESS = ['Accepted', 'Rejected', 'Pending', 'Resolved', 'In Progress', 'Withdrawn']
 
 class ViewComplaintScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -17,6 +20,56 @@ class ViewComplaintScreen extends Component {
       auth: this.props.bearer.access_token
     })
   }
+  componentWillReceiveProps (nextProps) { 
+    if (nextProps.edit.flag !== this.props.edit.flag && nextProps.edit.flag) {
+      this.props.getComplaintAction({
+        id: this.props.navigation.getParam('id'),
+        auth: this.props.bearer.access_token
+      })
+    }
+  }
+  onChange (value, key) {
+    const data = this.props.get.data
+    this.props.editComplaintAction({
+      data: {
+        title: data.title,
+        location: {
+          common_area: data.location.commonArea,
+          apartment: data.location.apartment,
+          facilities: data.location.facilities
+        },
+        details: data.details,
+        name: data.name,
+        contact_number: data.number,
+        email: data.email,
+        [key]: value
+      },
+      auth: this.props.bearer.access_token,
+      id: this.props.navigation.getParam('id')
+    })
+  }
+  renderStatus () {
+    const data = this.props.get.data
+    if (!this.props.bearer.is_admin) {
+      return (
+        <Picker style={styles.picker} selectedValue={data.status} onValueChange={(itemValue, itemIndex) => this.onChange(itemValue, 'status')}>
+          {STATUS.map((item, i) => <Picker.Item key={i} label={item} value={item} />)}
+        </Picker>
+      )
+    }
+    return <TextInput value={data.status} editable={false} style={styles.text} />
+  }
+  renderProgress () {
+    const data = this.props.get.data
+    if (this.props.bearer.is_admin) {
+      return (
+        <Picker style={styles.picker} selectedValue={data.status_by_admin} onValueChange={(itemValue, itemIndex) => this.onChange(itemValue, 'status_by_admin')}>
+          {PROGRESS.map((item, i) => <Picker.Item key={i} label={item} value={item} />)}
+        </Picker>
+      )
+    }
+    return <TextInput value={data.status_by_admin} editable={false} style={styles.text} />
+  }
   render () {
     const data = this.props.get.data
     data.name = this.props.bearer.user_name
@@ -29,9 +82,9 @@ class ViewComplaintScreen extends Component {
             <Text style={styles.title} >Name</Text>
             <TextInput value={data.name} editable={false} style={styles.text} />
             <Text style={styles.title} >Complaint Status</Text>
-            <TextInput value={data.status} editable={false} style={styles.text} />
+            {this.renderStatus()}
             <Text style={styles.title} >Progress</Text>
-            <TextInput value={data.status_by_admin} editable={false} style={styles.text} />
+            {this.renderProgress()}
             <Text style={styles.title} >Email</Text>
             <TextInput value={data.email} editable={false} style={styles.text} />
             <Text style={styles.title} >Contact Number</Text>
@@ -43,7 +96,7 @@ class ViewComplaintScreen extends Component {
             <Text style={styles.title} >Facilities</Text>
             {data.location && <TextInput value={data.location.facilities} editable={false} style={styles.text} />}
             <Text style={styles.title} >Details</Text>
-            <TextInput style={styles.text} value={data.details} editable={false} />
+            <TextInput style={styles.last} value={data.details} editable={false} />
           </ScrollView>
           { !this.props.bearer.is_admin && (
             <TouchableOpacity style={styles.float} >
@@ -60,10 +113,11 @@ class ViewComplaintScreen extends Component {
 
 const mapStateToProps = state => ({
   bearer: state.bearer,
-  get: state.getComplaint
+  get: state.getComplaint,
+  edit: state.editComplaint
 })
 
-export default connect(mapStateToProps, { getComplaintAction })(ViewComplaintScreen)
+export default connect(mapStateToProps, { getComplaintAction, editComplaintAction })(ViewComplaintScreen)
 
 const styles = StyleSheet.create({
   container: {
@@ -72,17 +126,35 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff'
   },
   scrollView: {
-    padding: 20
+    paddingLeft: 20,
+    paddingRight: 20
   }, 
   title:{
     fontSize: 20,
     fontWeight: 'bold',
     paddingTop: 5
   },
-  title:{
-    fontSize: 18,
-    paddingTop: 5
-  }, float: {
+  text: {
+    borderColor: '#ddd',
+    color: '#000',
+    backgroundColor: '#ddd',
+    borderWidth: 1,
+    paddingBottom: 5,
+    paddingLeft: 15,
+    paddingTop: 5,
+    marginBottom: 2,
+  },
+  last: {
+    borderColor: '#ddd',
+    color: '#000',
+    backgroundColor: '#ddd',
+    borderWidth: 1,
+    paddingBottom: 5,
+    paddingLeft: 15,
+    paddingTop: 5,
+    marginBottom: 10,
+  },
+  float: {
     width: 50,  
     height: 50,   
     borderRadius: 50,
@@ -94,5 +166,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     elevation: 10
-  },
+  }, picker: {
+    // borderColor: '#fff',
+    // color: '#000',
+    // backgroundColor: '#ddd',
+    // borderWidth: 1,
+    paddingBottom: 5,
+    paddingLeft: 15,
+    paddingTop: 5,
+    marginBottom: 2,
+  }
 })
