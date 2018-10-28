@@ -46,7 +46,7 @@ class ViewAnnouncementScreen extends Component {
             <Text style={styles.title} >Title</Text>
             <TextInput underlineColorAndroid="transparent" value={data.title} editable={false} style={styles.text} />
             <Text style={styles.title} >Details</Text>
-            <TextInput underlineColorAndroid="transparent" style={styles.last} value={data.details} editable={false} />
+            <Text style={styles.last}>{data.details}</Text>
           </ScrollView>
           { this.props.bearer.is_admin && (
             <TouchableOpacity style={styles.float} >
