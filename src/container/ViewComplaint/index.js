@@ -103,7 +103,7 @@ class ViewComplaintScreen extends Component {
             <Text style={styles.title} >Facilities</Text>
             {data.location && <TextInput underlineColorAndroid="transparent" value={data.location.facilities} editable={false} style={styles.text} />}
             <Text style={styles.title} >Details</Text>
-            <TextInput underlineColorAndroid="transparent" style={styles.last} value={data.details} editable={false} />
+            <TextInput multiline={true} numberOfLines={5} underlineColorAndroid="transparent" style={styles.last} value={data.details} editable={false} />
           </ScrollView>
           { !this.props.bearer.is_admin && (
             <TouchableOpacity style={styles.float} >

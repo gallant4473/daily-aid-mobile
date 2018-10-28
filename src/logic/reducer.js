@@ -13,6 +13,14 @@ import {
   editComplaintReducer
 } from './complaint'
 
+import {
+  addAnnouncementReducer,
+  getAllAnnouncementReducer,
+  getAnnouncementReducer,
+  deleteAnnouncementReducer,
+  editAnnouncementReducer
+} from './announcements'
+
 const rootReducer = combineReducers({
   login: loginReducer,
   logout: logoutReducer,
@@ -27,7 +35,12 @@ const rootReducer = combineReducers({
   getAllComplaint: getAllComplaintReducer,
   getComplaint: getComplaintReducer,
   deleteComplaint: deleteComplaintReducer,
-  editComplaint: editComplaintReducer
+  editComplaint: editComplaintReducer,
+  addAnnouncement: addAnnouncementReducer,
+  getAllAnnouncement: getAllAnnouncementReducer,
+  getAnnouncement: getAnnouncementReducer,
+  deleteAnnouncement: deleteAnnouncementReducer,
+  editAnnouncement: editAnnouncementReducer
 })
 
 export default rootReducer

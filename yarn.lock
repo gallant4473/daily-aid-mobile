@@ -3721,6 +3721,10 @@ react-timer-mixin@^0.13.2:
   version "0.13.3"
   resolved "https://registry.yarnpkg.com/react-timer-mixin/-/react-timer-mixin-0.13.3.tgz#0da8b9f807ec07dc3e854d082c737c65605b3d22"
 
+react-timestamp@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/react-timestamp/-/react-timestamp-4.4.0.tgz#9fd6d48929924dc9b0b9665fe56bee9fb26fda74"
+
 react-transform-hmr@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/react-transform-hmr/-/react-transform-hmr-1.0.4.tgz#e1a40bd0aaefc72e8dfd7a7cda09af85066397bb"

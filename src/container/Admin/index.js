@@ -5,10 +5,12 @@ import { Ionicons } from '@expo/vector-icons'
 
 import UserScreen from '../Users'
 import ActionScreen from '../Actions'
+import Announcements from '../Announcements'
 
 const TabsScreen = createMaterialTopTabNavigator({
   Users: UserScreen,
-  Actions: ActionScreen
+  Actions: ActionScreen,
+  Announcements
 }, {
   tabBarOptions: {
     style: {

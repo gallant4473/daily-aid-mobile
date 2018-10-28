@@ -11,11 +11,15 @@ import ForgotScreen from '../Forgot'
 import Status from '../Status'
 import AddComplaintScreen from '../AddComplaint'
 import ViewComplaintScreen from '../ViewComplaint'
+import AddAnnouncementScreen from '../AddAnnouncement'
+import ViewAnnouncementScreen from '../ViewAnnouncement'
 
 const MainAdminScreen = createStackNavigator({
   Admin: AdminScreen,
   Add: AddComplaintScreen,
-  View: ViewComplaintScreen
+  View: ViewComplaintScreen,
+  AddAnnouncement: AddAnnouncementScreen,
+  ViewAnnouncement: ViewAnnouncementScreen
 }, {
   navigationOptions: {
     headerStyle: {
@@ -32,7 +36,8 @@ const MainAdminScreen = createStackNavigator({
 const MainUserScreen = createStackNavigator({
   Home: HomeScreen,
   Add: AddComplaintScreen,
-  View: ViewComplaintScreen
+  View: ViewComplaintScreen,
+  ViewAnnouncement: ViewAnnouncementScreen
 }, {
   navigationOptions: {
     headerStyle: {
